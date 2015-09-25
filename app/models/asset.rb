@@ -3,9 +3,13 @@ class Asset < ActiveRecord::Base
   image_accessor :storage
 
   def percentage_thumb_url(size)
-    width = (storage.width * size).ceil
-    height = (storage.height * size).ceil
-    storage.thumb("#{width}x#{height}").url
+    if storage.width && storage.height
+      width = (storage.width * size).ceil
+      height = (storage.height * size).ceil
+      storage.thumb("#{width}x#{height}").url
+    else
+      Rails.logger.info "Failed to get sotrage width and height #{storage.inspect}"
+    end
   end
 
   def thumb_url
